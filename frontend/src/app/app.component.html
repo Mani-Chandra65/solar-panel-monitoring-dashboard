@@ -1,0 +1,184 @@
+<div class="container" *ngIf="!loading">
+  <!-- Header -->
+  <div class="dashboard-header">
+    <h1>☀️ {{ title }}</h1>
+    <div style="display: flex; gap: 10px; align-items: center;">
+      <button class="btn btn-primary" (click)="toggleAddForm()">
+        {{ showAddForm ? '✖ Close Form' : '➕ Add Reading' }}
+      </button>
+      <div [class]="'status-badge status-' + systemStatus">
+        {{ getStatusText() }}
+      </div>
+    </div>
+  </div>
+
+  <!-- Error Message -->
+  <div class="error" *ngIf="error">
+    <strong>Error:</strong> {{ error }}
+  </div>
+
+  <!-- CREATE/UPDATE Form -->
+  <div class="crud-form" *ngIf="showAddForm">
+    <h2>{{ editingReading ? '✏️ Edit Reading' : '➕ Add New Reading' }}</h2>
+    <form (ngSubmit)="editingReading ? updateReading() : createReading()">
+      <div class="form-grid">
+        <div class="form-group">
+          <label>⚡ Voltage (V)</label>
+          <input type="number" step="0.1" [(ngModel)]="newReading.voltage" 
+                 name="voltage" required (input)="calculatePower()">
+        </div>
+        
+        <div class="form-group">
+          <label>🔌 Current (A)</label>
+          <input type="number" step="0.1" [(ngModel)]="newReading.current" 
+                 name="current" required (input)="calculatePower()">
+        </div>
+        
+        <div class="form-group">
+          <label>💡 Power (W) <small>(auto-calculated)</small></label>
+          <input type="number" step="0.1" [(ngModel)]="newReading.power" 
+                 name="power" required readonly>
+        </div>
+        
+        <div class="form-group">
+          <label>🌡️ Temperature (°C)</label>
+          <input type="number" step="0.1" [(ngModel)]="newReading.temperature" 
+                 name="temperature" required>
+        </div>
+      </div>
+      
+      <div class="form-actions">
+        <button type="submit" class="btn btn-success">
+          {{ editingReading ? '💾 Update Reading' : '➕ Create Reading' }}
+        </button>
+        <button type="button" class="btn btn-secondary" (click)="cancelEdit()">
+          ✖ Cancel
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Stats Cards -->
+  <div class="stats-grid" *ngIf="latestReading">
+    <div [class]="latestReading.isAnomaly ? 'stat-card anomaly' : 'stat-card normal'">
+      <h3>⚡ Power Output</h3>
+      <div class="stat-value">{{ latestReading.power.toFixed(2) }}</div>
+      <div class="stat-unit">Watts</div>
+    </div>
+
+    <div [class]="latestReading.temperature > 70 ? 'stat-card anomaly' : 'stat-card normal'">
+      <h3>🌡️ Temperature</h3>
+      <div class="stat-value">{{ latestReading.temperature.toFixed(1) }}</div>
+      <div class="stat-unit">°C</div>
+    </div>
+
+    <div class="stat-card normal">
+      <h3>⚡ Voltage</h3>
+      <div class="stat-value">{{ latestReading.voltage.toFixed(2) }}</div>
+      <div class="stat-unit">Volts</div>
+    </div>
+
+    <div class="stat-card normal">
+      <h3>🔌 Current</h3>
+      <div class="stat-value">{{ latestReading.current.toFixed(2) }}</div>
+      <div class="stat-unit">Amperes</div>
+    </div>
+  </div>
+
+  <!-- Statistics Summary -->
+  <div class="stats-grid" *ngIf="stats">
+    <div class="stat-card">
+      <h3>📊 Total Readings</h3>
+      <div class="stat-value">{{ stats.totalReadings }}</div>
+    </div>
+
+    <div class="stat-card anomaly">
+      <h3>⚠️ Anomalies Detected</h3>
+      <div class="stat-value">{{ stats.anomalyCount }}</div>
+      <div class="stat-unit">{{ stats.anomalyRate }}% of total</div>
+    </div>
+
+    <div class="stat-card">
+      <h3>📈 Average Power</h3>
+      <div class="stat-value">{{ stats.averages.power }}</div>
+      <div class="stat-unit">Watts</div>
+    </div>
+
+    <div class="stat-card">
+      <h3>🌡️ Average Temp</h3>
+      <div class="stat-value">{{ stats.averages.temperature }}</div>
+      <div class="stat-unit">°C</div>
+    </div>
+  </div>
+
+  <!-- Charts -->
+  <div class="charts-section">
+    <div class="chart-card">
+      <h2>📊 Power & Temperature Trends</h2>
+      <div style="height: 300px;">
+        <canvas #powerTempChart></canvas>
+      </div>
+    </div>
+
+    <div class="chart-card">
+      <h2>⚡ Voltage & Current Trends</h2>
+      <div style="height: 300px;">
+        <canvas #voltageCurrentChart></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- Anomalies List -->
+  <div class="anomalies-section">
+    <h2>🚨 Recent Anomalies</h2>
+    
+    <div class="no-data" *ngIf="anomalies.length === 0">
+      ✓ No anomalies detected. System operating normally.
+    </div>
+
+    <div class="anomaly-list" *ngIf="anomalies.length > 0">
+      <div class="anomaly-item" *ngFor="let anomaly of anomalies">
+        <div class="anomaly-header">
+          <div class="anomaly-type">⚠️ Anomaly Detected</div>
+          <div style="display: flex; gap: 10px; align-items: center;">
+            <div class="anomaly-time">{{ formatDate(anomaly.timestamp) }}</div>
+            <button class="btn-icon btn-edit" (click)="startEdit(anomaly)" title="Edit">
+              ✏️
+            </button>
+            <button class="btn-icon btn-delete" (click)="deleteReading(anomaly._id)" title="Delete">
+              🗑️
+            </button>
+          </div>
+        </div>
+        
+        <div class="anomaly-details">
+          <div class="detail-item">
+            <span class="detail-label">Power</span>
+            <span class="detail-value">{{ anomaly.power.toFixed(2) }}W</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Temperature</span>
+            <span class="detail-value">{{ anomaly.temperature.toFixed(1) }}°C</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Voltage</span>
+            <span class="detail-value">{{ anomaly.voltage.toFixed(2) }}V</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Current</span>
+            <span class="detail-value">{{ anomaly.current.toFixed(2) }}A</span>
+          </div>
+        </div>
+        
+        <div class="anomaly-reason" *ngIf="anomaly.anomalyReason">
+          <strong>Reason:</strong> {{ anomaly.anomalyReason }}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Loading State -->
+<div class="loading" *ngIf="loading">
+  <h2>⏳ Loading Dashboard...</h2>
+</div>
