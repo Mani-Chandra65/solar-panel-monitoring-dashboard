@@ -453,7 +453,6 @@ PUT http://localhost:3000/api/data/:id
 DELETE http://localhost:3000/api/data/:id
 ```
 
-Full guide: See [CRUD_OPERATIONS.md](CRUD_OPERATIONS.md)
 
 
 
@@ -488,7 +487,7 @@ MIT License - Free to use for educational and commercial purposes
 ## 👨‍💻 Author
 
 **Created for Academic Project**  
-🎓 Course: Full Stack Development / IoT Monitoring Systems  
+🎓 Course: Web Programming with MEAN 
 🛠️ Tech Stack: MEAN (MongoDB, Express, Angular, Node.js)  
 🔬 Feature: Statistical Anomaly Detection Algorithm
 
