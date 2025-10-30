@@ -91,7 +91,7 @@ A full-stack MEAN (MongoDB, Express, Angular, Node.js) application for monitorin
 ## 🏗️ Architecture
 
 ```
-┌─────────────┐      HTTP/REST      ┌─────────────┐      Mongoose      ┌─────────────┐
+┌─────────────┐      HTTP/REST       ┌─────────────┐      Mongoose       ┌─────────────┐
 │   Angular   │ ◄──────────────────► │  Express    │ ◄─────────────────► │  MongoDB    │
 │  Dashboard  │                      │   Server    │                     │  Database   │
 └─────────────┘                      └─────────────┘                     └─────────────┘
@@ -157,7 +157,7 @@ if (V * I ≠ Power ±30%) → Power Factor Anomaly
 
 ```bash
 # Clone the repository
-git clone https://github.com/YOUR_USERNAME/solar-panel-monitoring.git
+git clone https://github.com/Mani-Chandra65/solar-panel-monitoring.git
 cd solar-panel-monitoring
 
 # Install and run (use install.ps1 for Windows)
@@ -185,7 +185,7 @@ npm start     # Run on http://localhost:4200
 
 #### 1️⃣ Clone Repository
 ```bash
-git clone https://github.com/YOUR_USERNAME/solar-panel-monitoring.git
+git clone https://github.com/Mani-Chandra65/solar-panel-monitoring.git
 cd solar-panel-monitoring
 ```
 
@@ -370,71 +370,7 @@ WPM_External/
 └── README.md
 ```
 
----
 
-## 🎓 Viva Presentation Points
-
-### 1. **Objective**
-> "Detect abnormal performance in solar panels to prevent energy loss and equipment damage."
-
-### 2. **Problem Statement**
-- Solar panels can degrade over time
-- Anomalies like overheating, shading, or faults reduce efficiency
-- Manual monitoring is impractical for large installations
-
-### 3. **Solution**
-- Real-time monitoring dashboard
-- Automated anomaly detection using statistical algorithms
-- Visual alerts for immediate action
-
-### 4. **Tech Stack Justification**
-- **MEAN Stack**: Full JavaScript ecosystem, easy integration
-- **MongoDB**: Flexible schema for time-series data
-- **Angular**: Reactive UI with real-time updates
-- **Node.js**: Fast, non-blocking I/O for real-time data
-
-### 5. **Anomaly Detection**
-- **Type**: Statistical + Rule-based (not ML-based for simplicity)
-- **Metrics**: Power, temperature, voltage, current
-- **Thresholds**: 
-  - Power < 70% of average
-  - Temperature > 80°C
-  - Voltage/Current deviations
-- **Baseline**: Last 100 normal readings
-
-### 6. **Key Features**
-- Dashboard with 4 key metrics
-- Two real-time charts (Power/Temp, Voltage/Current)
-- Anomaly history with detailed reasons
-- Auto-refresh every 10 seconds
-
-### 7. **Data Flow**
-```
-Panel → API → Anomaly Detection → MongoDB → Dashboard
-```
-
-### 8. **Demo Flow**
-1. Show dashboard with normal readings
-2. Highlight charts and statistics
-3. Point out anomaly alerts (red indicators)
-4. Explain anomaly reasons
-5. Demonstrate API using Postman (optional)
-
-### 9. **Future Enhancements**
-- **Machine Learning**: Use LSTM/Isolation Forest for pattern detection
-- **Predictive Maintenance**: Forecast failures before they occur
-- **Mobile App**: React Native dashboard
-- **IoT Integration**: Connect to real solar panel sensors
-- **Alerts**: Email/SMS notifications for critical anomalies
-- **Multi-Panel Support**: Monitor entire solar farms
-
-### 10. **Challenges Faced**
-- Balancing sensitivity (too many false positives vs. missed anomalies)
-- Choosing appropriate statistical thresholds
-- Real-time data visualization performance
-- Handling insufficient historical data (cold start problem)
-
----
 
 ## 🧪 Testing
 
@@ -519,19 +455,7 @@ DELETE http://localhost:3000/api/data/:id
 
 Full guide: See [CRUD_OPERATIONS.md](CRUD_OPERATIONS.md)
 
----
 
-## 📚 Documentation
-
-- **[SETUP_GUIDE.md](SETUP_GUIDE.md)** - Detailed installation steps
-- **[API_TESTING.md](API_TESTING.md)** - Complete API documentation
-- **[CRUD_OPERATIONS.md](CRUD_OPERATIONS.md)** - CRUD testing guide
-- **[FRONTEND_CRUD_GUIDE.md](FRONTEND_CRUD_GUIDE.md)** - Frontend CRUD usage
-- **[VIVA_GUIDE.md](VIVA_GUIDE.md)** - Presentation script
-- **[PROJECT_SUMMARY.md](PROJECT_SUMMARY.md)** - Technical overview
-- **[WHAT_MY_PRODUCT_DOES.md](WHAT_MY_PRODUCT_DOES.md)** - Product explanation
-
----
 
 ## 🤝 Contributing
 
@@ -582,9 +506,9 @@ MIT License - Free to use for educational and commercial purposes
 ## 📞 Support
 
 For issues or questions:
-- 📧 Open an [Issue](https://github.com/YOUR_USERNAME/solar-panel-monitoring/issues)
+- 📧 Open an [Issue](https://github.com/Mani-Chandra65/solar-panel-monitoring/issues)
 - 📖 Read the [Documentation](./SETUP_GUIDE.md)
-- 💬 Check [Discussions](https://github.com/YOUR_USERNAME/solar-panel-monitoring/discussions)
+- 💬 Check [Discussions](https://github.com/Mani-Chandra65/solar-panel-monitoring/discussions)
 1. Check API is running: `http://localhost:3000`
 2. Check MongoDB connection
 3. Verify CORS settings if frontend can't reach backend
