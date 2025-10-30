@@ -3,6 +3,12 @@
   <div class="dashboard-header">
     <h1>☀️ {{ title }}</h1>
     <div style="display: flex; gap: 10px; align-items: center;">
+      <span *ngIf="refreshing" style="color: #667eea; font-size: 14px; font-weight: 500;">
+        <span class="refreshing-icon">🔄</span> Refreshing...
+      </span>
+      <span *ngIf="!refreshing && lastRefreshTime" style="color: #666; font-size: 12px;">
+        ✓ Updated {{ lastRefreshTime | date:'HH:mm:ss' }}
+      </span>
       <button class="btn btn-primary" (click)="toggleAddForm()">
         {{ showAddForm ? '✖ Close Form' : '➕ Add Reading' }}
       </button>

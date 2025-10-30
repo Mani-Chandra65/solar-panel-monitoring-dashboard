@@ -29,6 +29,8 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
   loading = true;
   error: string | null = null;
   systemStatus: 'normal' | 'warning' | 'alert' = 'normal';
+  refreshing = false;
+  lastRefreshTime: Date | null = null;
   
   // Auto-refresh
   private refreshInterval: any;
@@ -157,10 +159,10 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
   ngOnInit() {
     this.loadAllData();
     
-    // Refresh data every 10 seconds
+    // Refresh data every 30 seconds (increased from 10 to reduce flickering)
     this.refreshInterval = setInterval(() => {
       this.loadAllData();
-    }, 10000);
+    }, 30000);
   }
 
   ngAfterViewInit() {
@@ -210,7 +212,13 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   loadAllData() {
-    this.loading = true;
+    // Only show loading spinner on first load, not on auto-refresh
+    const isFirstLoad = this.readings.length === 0;
+    if (isFirstLoad) {
+      this.loading = true;
+    } else {
+      this.refreshing = true;
+    }
     this.error = null;
 
     // Load latest reading
@@ -229,11 +237,18 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
       next: (response: any) => {
         this.readings = response.data.reverse(); // Reverse to show chronological order
         this.updateCharts();
-        this.loading = false;
+        this.lastRefreshTime = new Date();
+        this.refreshing = false;
+        if (isFirstLoad) {
+          this.loading = false;
+        }
       },
       error: (err: any) => {
         this.error = 'Failed to load readings. Make sure the backend server is running.';
-        this.loading = false;
+        this.refreshing = false;
+        if (isFirstLoad) {
+          this.loading = false;
+        }
         console.error('Error loading readings:', err);
       }
     });

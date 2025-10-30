@@ -404,6 +404,26 @@ body {
   transform: scale(1.2);
 }
 
+/* Refresh indicator animation */
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.refreshing-icon {
+  display: inline-block;
+  animation: spin 1s linear infinite;
+}
+
+/* Smooth chart updates */
+canvas {
+  transition: opacity 0.3s ease;
+}
+
 /* Responsive adjustments */
 @media (max-width: 768px) {
   .form-grid {
